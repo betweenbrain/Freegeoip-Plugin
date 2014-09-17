@@ -57,16 +57,19 @@ class plgSystemFreegeoip extends JPlugin
 	{
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
-			CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_URL            => 'http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR'],
-		));
+				CURLOPT_RETURNTRANSFER => 1,
+				CURLOPT_URL            => 'http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR'],
+				CURLOPT_FAILONERROR    => true
+			)
+		);
 		$response = curl_exec($curl);
-		curl_close($curl);
 
-		if (!curl_exec($curl) || !is_object(json_decode($response)))
+		if (!curl_exec($curl))
 		{
-			$this->app->enqueueMessage('Error: System - Freegeoip plugin "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
+			$this->app->enqueueMessage(JText::sprintf('PLG_SYSTEM_FREEGEOIP_CURL_ERROR', curl_error($curl), curl_errno($curl)), 'warning');
 		}
+
+		curl_close($curl);
 
 		return $response;
 	}
@@ -83,7 +86,6 @@ class plgSystemFreegeoip extends JPlugin
 		foreach ($response as $key => $value)
 		{
 			$this->session->set('freegeoip_' . $key, $value);
-			$this->app->enqueueMessage('<pre>' . 'freegeoip_' . $key . ': ' . $value . '</pre>');
 		}
 
 		return true;
