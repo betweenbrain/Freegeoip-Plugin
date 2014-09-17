@@ -63,6 +63,11 @@ class plgSystemFreegeoip extends JPlugin
 		$response = curl_exec($curl);
 		curl_close($curl);
 
+		if (!curl_exec($curl) || !is_object(json_decode($response)))
+		{
+			$this->app->enqueueMessage('Error: System - Freegeoip plugin "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
+		}
+
 		return $response;
 	}
 
