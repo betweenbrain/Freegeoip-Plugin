@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.2" type="plugin" group="system" method="upgrade">
+	<author>Matt Thomas</author>
+	<authorEmail>matt@betweenbrain.com</authorEmail>
+	<authorUrl>http://betweenbrain.com</authorUrl>
+	<copyright>(C) 2014 betweenbrain llc. All rights reserved.</copyright>
+	<creationDate>September 17, 2014</creationDate>
+	<description>PLG_SYSTEM_FREEGEOIP_DESC</description>
+	<license>GNU/GPL v2 or later</license>
+	<name>plg_system_freegeoip</name>
+	<scriptfile>script.php</scriptfile>
+	<version>1.0</version>
+
+	<files>
+		<filename plugin="freegeoip">freegeoip.php</filename>
+		<folder>language</folder>
+	</files>
+
+</extension>
