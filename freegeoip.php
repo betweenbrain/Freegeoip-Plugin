@@ -78,7 +78,6 @@ class plgSystemFreegeoip extends JPlugin
 		foreach ($response as $key => $value)
 		{
 			$this->session->set('freegeoip_' . $key, $value);
-			$this->app->enqueueMessage('<pre>' . 'freegeoip_' . $key . ': ' . $value . '</pre>');
 		}
 
 		return true;
