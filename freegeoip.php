@@ -55,10 +55,13 @@ class plgSystemFreegeoip extends JPlugin
 	 */
 	private function getFreegeoip()
 	{
+		$debug_ip = $this->params->get('debug_ip');
+		$ipAddress = ($debug_ip) ? $debug_ip : $_SERVER['REMOTE_ADDR'];
+
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
 				CURLOPT_RETURNTRANSFER => 1,
-				CURLOPT_URL            => 'http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR'],
+				CURLOPT_URL            => 'http://freegeoip.net/json/' . $ipAddress,
 				CURLOPT_FAILONERROR    => true
 			)
 		);
@@ -81,13 +84,18 @@ class plgSystemFreegeoip extends JPlugin
 	 */
 	private function setFreegeoip()
 	{
-		$response = json_decode($this->getFreegeoip());
+		$response = $this->getFreegeoip();
+		if ($response) {
+			$response = json_decode($this->getFreegeoip());
+	
+			foreach ($response as $key => $value)
+			{
+				$this->session->set('freegeoip_' . $key, $value);
+			}
 
-		foreach ($response as $key => $value)
-		{
-			$this->session->set('freegeoip_' . $key, $value);
+			return true;
+		} else {
+			return false;
 		}
-
-		return true;
 	}
 }
