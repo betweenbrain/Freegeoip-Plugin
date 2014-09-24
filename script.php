@@ -1,4 +1,4 @@
-<?php
+<?php defined('_JEXEC') or die;
 
 /**
  * File       script.php
