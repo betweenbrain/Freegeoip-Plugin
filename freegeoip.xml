@@ -9,7 +9,7 @@
 	<license>GNU/GPL v2 or later</license>
 	<name>plg_system_freegeoip</name>
 	<scriptfile>script.php</scriptfile>
-	<version>1.0</version>
+	<version>1.0.0</version>
 
 	<files>
 		<filename plugin="freegeoip">freegeoip.php</filename>
