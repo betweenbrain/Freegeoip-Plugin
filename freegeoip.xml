@@ -16,4 +16,8 @@
 		<folder>language</folder>
 	</files>
 
+	<updateservers>
+		<server type="extension" name="Freegeoip Plugin Updates">http://betweenbrain.com/updates/freegeoip-plugin.xml</server>
+	</updateservers>
+
 </extension>
