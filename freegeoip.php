@@ -60,7 +60,7 @@ class plgSystemFreegeoip extends JPlugin
 				CURLOPT_RETURNTRANSFER => 1,
 				CURLOPT_URL            => 'http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR'],
 				CURLOPT_FAILONERROR    => true,
-				CURLOPT_TIMEOUT         => 1
+				CURLOPT_TIMEOUT        => 1
 			)
 		);
 		$response = curl_exec($curl);
@@ -95,13 +95,19 @@ class plgSystemFreegeoip extends JPlugin
 	 */
 	private function setFreegeoip()
 	{
-		$response = json_decode($this->getFreegeoip());
+		$response = $this->getFreegeoip();
 
-		foreach ($response as $key => $value)
+		if ($response)
 		{
-			$this->session->set('freegeoip_' . $key, $value);
+			foreach (json_decode($response) as $key => $value)
+			{
+				$this->session->set('freegeoip_' . $key, $value);
+			}
+
+			return true;
+
 		}
 
-		return true;
+		return false;
 	}
 }
