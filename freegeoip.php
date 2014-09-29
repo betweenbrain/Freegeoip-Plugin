@@ -59,7 +59,8 @@ class plgSystemFreegeoip extends JPlugin
 		curl_setopt_array($curl, array(
 				CURLOPT_RETURNTRANSFER => 1,
 				CURLOPT_URL            => 'http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR'],
-				CURLOPT_FAILONERROR    => true
+				CURLOPT_FAILONERROR    => true,
+				CURLOPT_TIMEOUT         => 1
 			)
 		);
 		$response = curl_exec($curl);
