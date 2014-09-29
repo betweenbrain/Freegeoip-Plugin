@@ -66,7 +66,20 @@ class plgSystemFreegeoip extends JPlugin
 
 		if (!curl_exec($curl))
 		{
-			$this->app->enqueueMessage(JText::sprintf('PLG_SYSTEM_FREEGEOIP_CURL_ERROR', curl_error($curl), curl_errno($curl)), 'warning');
+			JLog::addLogger(
+				array(
+					// Sets file name
+					'text_file' => 'plg_freegeoip.errors.php'
+				),
+				// Sets messages of all log levels to be sent to the file
+				JLog::WARNING,
+				// The log category/categories which should be recorded in this file
+				array(
+					'plg_freegeopip'
+				)
+			);
+
+			JLog::add(JText::sprintf('PLG_SYSTEM_FREEGEOIP_CURL_ERROR', curl_error($curl), curl_errno($curl)), JLog::WARNING, 'plg_freegeopip');
 		}
 
 		curl_close($curl);
