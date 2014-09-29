@@ -16,6 +16,20 @@
 		<folder>language</folder>
 	</files>
 
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="debugIp"
+				       type="text"
+				       default=""
+				       filter="CMD"
+				       size="40"
+				       label="PLG_SYSTEM_FREEGEOIP_DEBUG_IP"
+				       description="PLG_SYSTEM_FREEGEOIP_DEBUG_IP_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+
 	<updateservers>
 		<server type="extension" name="Freegeoip Plugin Updates">http://betweenbrain.com/updates/freegeoip-plugin.xml</server>
 	</updateservers>

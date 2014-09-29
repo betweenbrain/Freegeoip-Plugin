@@ -55,10 +55,13 @@ class plgSystemFreegeoip extends JPlugin
 	 */
 	private function getFreegeoip()
 	{
+		$debugIp   = $this->params->get('debugIp');
+		$ipAddress = ($debugIp) ? $debugIp : $_SERVER['REMOTE_ADDR'];
+
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
 				CURLOPT_RETURNTRANSFER => 1,
-				CURLOPT_URL            => 'http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR'],
+				CURLOPT_URL            => 'http://freegeoip.net/json/' . $ipAddress,
 				CURLOPT_FAILONERROR    => true,
 				CURLOPT_TIMEOUT        => 1
 			)
