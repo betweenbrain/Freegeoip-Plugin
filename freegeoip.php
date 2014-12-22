@@ -55,18 +55,35 @@ class plgSystemFreegeoip extends JPlugin
 	 */
 	private function getFreegeoip()
 	{
-		$debugIp   = $this->params->get('debugIp');
-		$ipAddress = ($debugIp) ? $debugIp : $_SERVER['REMOTE_ADDR'];
+		$altProvider = $this->params->get('altProvider', '');
+		$debugIp     = $this->params->get('debugIp');
+		$ipAddress   = ($debugIp) ? $debugIp : $_SERVER['REMOTE_ADDR'];
 
 		$curl = curl_init();
-		curl_setopt_array($curl, array(
-				CURLOPT_RETURNTRANSFER => 1,
-				CURLOPT_URL            => 'http://freegeoip.net/json/' . $ipAddress,
-				CURLOPT_FAILONERROR    => true,
-				CURLOPT_TIMEOUT        => 1
-			)
-		);
-		$response = curl_exec($curl);
+
+		if ($altProvider)
+		{
+			curl_setopt_array($curl, array(
+					CURLOPT_RETURNTRANSFER => 1,
+					CURLOPT_URL            => $altProvider . '/json/' . $ipAddress,
+					CURLOPT_FAILONERROR    => true,
+					CURLOPT_TIMEOUT        => 1
+				)
+			);
+			$response = curl_exec($curl);
+		}
+
+		if (!$altProvider || ($altProvider && curl_getinfo($curl, CURLINFO_HTTP_CODE) != '200'))
+		{
+			curl_setopt_array($curl, array(
+					CURLOPT_RETURNTRANSFER => 1,
+					CURLOPT_URL            => 'http://freegeoip.net/json/' . $ipAddress,
+					CURLOPT_FAILONERROR    => true,
+					CURLOPT_TIMEOUT        => 1
+				)
+			);
+			$response = curl_exec($curl);
+		}
 
 		if (!curl_exec($curl))
 		{
