@@ -55,7 +55,7 @@ class plgSystemFreegeoip extends JPlugin
 	 */
 	private function getFreegeoip()
 	{
-		$altProvider = $this->params->get('altProvider', '');
+		$altProvider = rtrim($this->params->get('altProvider', ''), '/');
 		$debugIp     = $this->params->get('debugIp');
 		$ipAddress   = ($debugIp) ? $debugIp : $_SERVER['REMOTE_ADDR'];
 
