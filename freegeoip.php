@@ -87,25 +87,35 @@ class plgSystemFreegeoip extends JPlugin
 
 		if (!curl_exec($curl))
 		{
-			JLog::addLogger(
-				array(
-					// Sets file name
-					'text_file' => 'plg_freegeoip.errors.php'
-				),
-				// Sets messages of all log levels to be sent to the file
-				JLog::WARNING,
-				// The log category/categories which should be recorded in this file
-				array(
-					'plg_freegeopip'
-				)
-			);
-
-			JLog::add(JText::sprintf('PLG_SYSTEM_FREEGEOIP_CURL_ERROR', curl_error($curl), curl_errno($curl)), JLog::WARNING, 'plg_freegeopip');
+			$this->addLogEntry(JText::sprintf('PLG_SYSTEM_FREEGEOIP_CURL_ERROR', curl_error($curl), curl_errno($curl)));
 		}
 
 		curl_close($curl);
 
 		return $response;
+	}
+
+	/**
+	 * Adds entry to a log file
+	 *
+	 * @param $entry
+	 */
+	private function addLogEntry($entry)
+	{
+		JLog::addLogger(
+			array(
+				// Sets file name
+				'text_file' => 'plg_freegeoip.errors.php'
+			),
+			// Sets messages of all log levels to be sent to the file
+			JLog::WARNING,
+			// The log category/categories which should be recorded in this file
+			array(
+				'plg_freegeopip'
+			)
+		);
+
+		JLog::add($entry, JLog::WARNING, 'plg_freegeopip');
 	}
 
 	/**
@@ -127,6 +137,7 @@ class plgSystemFreegeoip extends JPlugin
 				if ($enableDiagnostic)
 				{
 					$this->app->enqueueMessage('freegeoip_' . $key . ': ' . $value);
+					$this->addLogEntry('freegeoip_' . $key . ': ' . $value);
 				}
 			}
 
@@ -136,6 +147,7 @@ class plgSystemFreegeoip extends JPlugin
 		if (!$response && $enableDiagnostic)
 		{
 			$this->app->enqueueMessage(JText::_('PLG_SYSTEM_FREEGEOIP_NO_RESPONSE'));
+			$this->addLogEntry(JText::_('PLG_SYSTEM_FREEGEOIP_NO_RESPONSE'));
 		}
 
 		return false;
