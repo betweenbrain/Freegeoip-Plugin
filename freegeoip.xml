@@ -34,6 +34,16 @@
 				       label="PLG_SYSTEM_FREEGEOIP_ALT_PROVIDER_LABEL"
 				       description="PLG_SYSTEM_FREEGEOIP_ALT_PROVIDER_DESC" />
 			</fieldset>
+			<fieldset name="advanced">
+				<field name="enableDiagnostic"
+				       type="list"
+				       default=""
+				       label="PLG_SYSTEM_FREEGEOIP_ENABLE_DIAGNOSTIC_LABEL"
+				       description="PLG_SYSTEM_FREEGEOIP_ENABLE_DIAGNOSTIC_DESC">
+					<option value="">JNo</option>
+					<option value="1">JYes</option>
+				</field>
+			</fieldset>
 		</fields>
 	</config>
 
