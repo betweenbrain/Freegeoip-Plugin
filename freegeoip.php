@@ -98,17 +98,27 @@ class plgSystemFreegeoip extends JPlugin
 	 */
 	private function setFreegeoip()
 	{
-		$response = $this->getFreegeoip();
+		$enableDiagnostic = $this->params->get('enableDiagnostic');
+		$response         = $this->getFreegeoip();
 
 		if ($response)
 		{
 			foreach (json_decode($response) as $key => $value)
 			{
 				$this->session->set('freegeoip_' . $key, $value);
+
+				if ($enableDiagnostic)
+				{
+					$this->app->enqueueMessage('freegeoip_' . $key . ': ' . $value);
+				}
 			}
 
 			return true;
+		}
 
+		if (!$response && $enableDiagnostic)
+		{
+			$this->app->enqueueMessage(JText::_('PLG_SYSTEM_FREEGEOIP_NO_RESPONSE'));
 		}
 
 		return false;
