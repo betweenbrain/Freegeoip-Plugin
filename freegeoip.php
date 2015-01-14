@@ -49,6 +49,43 @@ class plgSystemFreegeoip extends JPlugin
 	}
 
 	/**
+	 * Checks all the things in order to try and get the user's IP
+	 *
+	 * @return string
+	 */
+	private function getUserIP()
+	{
+
+		if (isset($_SERVER))
+		{
+
+			if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+			{
+				return filter_var($_SERVER["HTTP_X_FORWARDED_FOR"], FILTER_VALIDATE_IP);
+			}
+
+			if (isset($_SERVER["HTTP_CLIENT_IP"]))
+			{
+				return filter_var($_SERVER["HTTP_CLIENT_IP"], FILTER_VALIDATE_IP);
+			}
+
+			return filter_var($_SERVER["REMOTE_ADDR"], FILTER_VALIDATE_IP);
+		}
+
+		if (getenv('HTTP_X_FORWARDED_FOR'))
+		{
+			return filter_var(getenv('HTTP_X_FORWARDED_FOR'), FILTER_VALIDATE_IP);
+		}
+
+		if (getenv('HTTP_CLIENT_IP'))
+		{
+			return filter_var(getenv('HTTP_CLIENT_IP'), FILTER_VALIDATE_IP);
+		}
+
+		return filter_var(getenv('REMOTE_ADDR'), FILTER_VALIDATE_IP);
+	}
+
+	/**
 	 * Gets the Freegeoip data about the user
 	 *
 	 * @return mixed
@@ -57,7 +94,7 @@ class plgSystemFreegeoip extends JPlugin
 	{
 		$altProvider = rtrim($this->params->get('altProvider', ''), '/');
 		$debugIp     = $this->params->get('debugIp');
-		$ipAddress   = ($debugIp) ? $debugIp : $_SERVER['REMOTE_ADDR'];
+		$ipAddress   = ($debugIp) ? $debugIp : $this->getUserIP();
 
 		$curl = curl_init();
 
@@ -136,7 +173,6 @@ class plgSystemFreegeoip extends JPlugin
 
 				if ($enableDiagnostic)
 				{
-					$this->app->enqueueMessage('freegeoip_' . $key . ': ' . $value);
 					$this->addLogEntry('freegeoip_' . $key . ': ' . $value);
 				}
 			}
@@ -146,7 +182,6 @@ class plgSystemFreegeoip extends JPlugin
 
 		if (!$response && $enableDiagnostic)
 		{
-			$this->app->enqueueMessage(JText::_('PLG_SYSTEM_FREEGEOIP_NO_RESPONSE'));
 			$this->addLogEntry(JText::_('PLG_SYSTEM_FREEGEOIP_NO_RESPONSE'));
 		}
 
